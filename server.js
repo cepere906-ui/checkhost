@@ -6,6 +6,8 @@ const dns = require('dns').promises;
 
 const REQUEST_TIMEOUT = 5000;
 
+const REQUEST_TIMEOUT = 5000;
+
 const publicDir = path.join(__dirname, 'public');
 
 function getIp(req) {
