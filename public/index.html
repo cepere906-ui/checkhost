@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your IP</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+    .card {
+      width: min(420px, 90vw);
+      padding: 24px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.9);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    h1 { font-size: 1.25rem; margin: 0 0 6px; }
+    p { margin: 0 0 16px; color: #cbd5e1; }
+    .ip {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button {
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #1d4ed8;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+    button:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(30, 64, 175, 0.35); }
+    button:active { transform: translateY(0); box-shadow: none; }
+    .status { color: #94a3b8; font-size: 0.9rem; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Your current IP</h1>
+    <p>Data is resolved server-side using the inbound request (works behind proxies on Render).</p>
+    <div id="ip" class="ip">Loading…</div>
+    <div class="status" id="status" aria-live="polite"></div>
+    <button id="refresh" type="button">Refresh</button>
+  </main>
+  <script>
+    const ipEl = document.getElementById('ip');
+    const statusEl = document.getElementById('status');
+    const refreshBtn = document.getElementById('refresh');
+
+    async function loadIp() {
+      ipEl.textContent = 'Loading…';
+      statusEl.textContent = '';
+      try {
+        const res = await fetch('/api/ip');
+        if (!res.ok) throw new Error('Request failed');
+        const { ip } = await res.json();
+        ipEl.textContent = ip || 'Unavailable';
+      } catch (err) {
+        ipEl.textContent = 'Error';
+        statusEl.textContent = 'Could not load IP. Try again.';
+      }
+    }
+
+    refreshBtn.addEventListener('click', loadIp);
+    loadIp();
+  </script>
+</body>
+</html>
