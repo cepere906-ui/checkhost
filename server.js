@@ -4,9 +4,7 @@ const path = require('path');
 const net = require('net');
 const dns = require('dns').promises;
 
-const REQUEST_TIMEOUT = 5000;
-
-const REQUEST_TIMEOUT = 5000;
+const REQUEST_TIMEOUT_MS = 5000;
 
 const publicDir = path.join(__dirname, 'public');
 
@@ -35,7 +33,7 @@ function serveStatic(res, filePath, contentType = 'text/html') {
 
 function abortableFetch(url) {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   return fetch(url, { signal: controller.signal })
     .finally(() => clearTimeout(timeout));
