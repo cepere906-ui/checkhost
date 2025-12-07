@@ -1,83 +1,461 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your IP</title>
-  <style>
-    :root { color-scheme: dark; }
-    body {
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: #0f172a;
-      color: #e2e8f0;
-    }
-    .card {
-      width: min(420px, 90vw);
-      padding: 24px;
-      border-radius: 14px;
-      background: rgba(15, 23, 42, 0.9);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.07);
-    }
-    h1 { font-size: 1.25rem; margin: 0 0 6px; }
-    p { margin: 0 0 16px; color: #cbd5e1; }
-    .ip {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    button {
-      margin-top: 14px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: #1d4ed8;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
-    }
-    button:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(30, 64, 175, 0.35); }
-    button:active { transform: translateY(0); box-shadow: none; }
-    .status { color: #94a3b8; font-size: 0.9rem; margin-top: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>checkhost.hiend.shop | Premium Network Intelligence</title>
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-color: #050505;
+            --surface-color: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-color: #ffaa40; /* Luxury Amber */
+            --accent-glow: rgba(255, 170, 64, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 170, 64, 0.03), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02), transparent 25%);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-weight: 200;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent-color); }
+
+        /* --- LAYOUT --- */
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- SEARCH SECTION --- */
+        .search-wrapper {
+            width: 100%;
+            position: relative;
+            transition: transform 0.6s var(--ease-out);
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px; 
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.4s var(--ease-out);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 30px var(--accent-glow);
+            transform: scale(1.01);
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 2rem;
+            font-weight: 300;
+            width: 100%;
+            font-family: var(--font-main);
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255, 0.1);
+        }
+
+        .action-btn {
+            background: var(--text-primary);
+            color: var(--bg-color);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 1rem;
+            transition: transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            background: var(--accent-color);
+        }
+
+        /* --- RESULTS GRID --- */
+        .results-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 4rem;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.8s var(--ease-out);
+        }
+
+        .results-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--border-color);
+            padding: 1.6rem;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.2rem;
+        }
+
+        .card-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.5rem 0 0.8rem;
+        }
+
+        .card-value {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .card-value strong {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: block;
+        }
+
+        .full-width {
+            grid-column: span 3;
+        }
+
+        .map-visual {
+            height: 250px;
+            width: 100%;
+            background-image: 
+                radial-gradient(var(--border-color) 1px, transparent 1px);
+            background-size: 25px 25px;
+            position: relative;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .map-pin {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--accent-color);
+            position: relative;
+        }
+        
+        .map-pin::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 100px; height: 100px;
+            transform: translate(-50%, -50%);
+            border: 1px solid var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: pulse 2s infinite;
+        }
+
+        /* --- LOADING STATE --- */
+        .loader {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .loader-bar {
+            width: 50%;
+            height: 100%;
+            background: var(--accent-color);
+            position: absolute;
+            left: -50%;
+            animation: load 1.5s infinite ease-in-out;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .loading .loader { opacity: 1; }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.2);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes pulse {
+            0% { width: 0; height: 0; opacity: 0.8; }
+            100% { width: 100px; height: 100px; opacity: 0; }
+        }
+
+        @keyframes load {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .results-container { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: span 2; }
+            input { font-size: 1.4rem; }
+        }
+
+        @media (max-width: 600px) {
+            .results-container { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            input { font-size: 1.2rem; }
+            .search-box { padding: 1rem; border-radius: 16px; }
+        }
+    </style>
 </head>
 <body>
-  <main class="card">
-    <h1>Your current IP</h1>
-    <p>Data is resolved server-side using the inbound request (works behind proxies on Render).</p>
-    <div id="ip" class="ip">Loading…</div>
-    <div class="status" id="status" aria-live="polite"></div>
-    <button id="refresh" type="button">Refresh</button>
-  </main>
-  <script>
-    const ipEl = document.getElementById('ip');
-    const statusEl = document.getElementById('status');
-    const refreshBtn = document.getElementById('refresh');
 
-    async function loadIp() {
-      ipEl.textContent = 'Loading…';
-      statusEl.textContent = '';
-      try {
-        const res = await fetch('/api/ip');
-        if (!res.ok) throw new Error('Request failed');
-        const { ip } = await res.json();
-        ipEl.textContent = ip || 'Unavailable';
-      } catch (err) {
-        ipEl.textContent = 'Error';
-        statusEl.textContent = 'Could not load IP. Try again.';
-      }
-    }
+    <nav style="padding: 2rem; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+        <a href="#" class="logo">checkhost<span>.hiend</span></a>
+        <div style="width: 24px; height: 2px; background: white; opacity: 0.5;"></div>
+    </nav>
 
-    refreshBtn.addEventListener('click', loadIp);
-    loadIp();
-  </script>
+    <div class="container">
+        <h1>Global Network Intelligence</h1>
+        
+        <div class="search-wrapper" id="search-wrapper">
+            <div class="search-box">
+                <input type="text" id="hostInput" placeholder="45.144.54.29" autocomplete="off">
+                <button class="action-btn" id="scanBtn">SCAN</button>
+            </div>
+            <div class="loader" id="loader"><div class="loader-bar"></div></div>
+        </div>
+
+        <div class="results-container" id="results"></div>
+    </div>
+
+    <footer>
+        CHECKHOST.HIEND.SHOP &copy; 2025 <br> ESTABLISHED IN CYBERSPACE
+    </footer>
+
+    <script>
+        const providersMeta = [
+            { id: 'cloudflare', title: 'CloudFlare CDN (07.12.2025)' },
+            { id: 'dbip', title: 'DB-IP (01.12.2025)' },
+            { id: 'ipgeolocation', title: 'IPGeolocation.io (01.12.2025)' },
+            { id: 'ip2location', title: 'IP2Location (01.12.2025)' },
+            { id: 'ipinfo', title: 'IPInfo.io (01.12.2025)' },
+        ];
+
+        const hostInput = document.getElementById('hostInput');
+        const scanBtn = document.getElementById('scanBtn');
+        const resultsEl = document.getElementById('results');
+        const wrapper = document.getElementById('search-wrapper');
+
+        function renderSummary(meta) {
+            const input = meta.input || meta.query || '—';
+            const resolved = meta.resolved || input;
+            const hostname = meta.hostname || '—';
+            return `
+                <div class="card full-width">
+                    <div class="card-title">Query summary</div>
+                    <div class="card-value">
+                        <span class="card-label">Input:</span> ${input}<br>
+                        <span class="card-label">Resolved IP:</span> ${resolved}<br>
+                        <span class="card-label">Hostname:</span> ${hostname}
+                    </div>
+                </div>
+            `;
+        }
+
+        function countryWithFlag(country, code) {
+            if (!country && !code) return 'Unavailable';
+            const flag = code && code.length === 2
+                ? code.toUpperCase().replace(/./g, char => String.fromCodePoint(127397 + char.charCodeAt()))
+                : '';
+            const label = country || code || 'Unknown';
+            return `${flag ? flag + ' ' : ''}${label}`;
+        }
+
+        function renderCard(provider) {
+            const status = provider.ok ? '' : `<div class="card-value" style="color: #ff6b6b;">${provider.error || 'Unavailable'}</div>`;
+            const body = provider.ok ? `
+                <div class="card-label">IP:</div>
+                <div class="card-value"><strong>${provider.ip || 'N/A'}</strong></div>
+                <div class="card-divider"></div>
+                <div class="card-value">
+                    <span class="card-label">Hostname:</span> ${provider.hostname || '—'}<br>
+                    <span class="card-label">ASN:</span> ${provider.asn || '—'}<br>
+                    <span class="card-label">ISP / Org:</span> ${provider.isp || provider.org || '—'}<br>
+                    <span class="card-label">Country/Region:</span> ${countryWithFlag(provider.country, provider.countryCode)}<br>
+                    <span class="card-label">City:</span> ${provider.city || '—'}
+                </div>
+            ` : status;
+
+            return `
+                <div class="card">
+                    <div class="card-title">${provider.label || provider.title}</div>
+                    ${body}
+                </div>
+            `;
+        }
+
+        function renderMap(aggregate) {
+            const lat = aggregate?.latitude;
+            const lon = aggregate?.longitude;
+            const latLabel = lat == null ? '—' : lat.toFixed(4);
+            const lonLabel = lon == null ? '—' : lon.toFixed(4);
+            return `
+                <div class="card full-width" style="padding: 0; margin-top: 1rem;">
+                    <div style="padding: 1.5rem 1.5rem 0 1.5rem;">
+                        <div class="card-label">Aggregated Geo-Positioning</div>
+                    </div>
+                    <div class="map-visual">
+                        <div class="map-pin"></div>
+                    </div>
+                    <div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); margin-top: auto; display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">LAT: ${latLabel}</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">LONG: ${lonLabel}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setLoading(loading) {
+            wrapper.classList.toggle('loading', loading);
+            resultsEl.classList.toggle('visible', !loading);
+        }
+
+        async function lookup(host) {
+            setLoading(true);
+            try {
+                const res = await fetch(`/api/lookup?target=${encodeURIComponent(host)}`);
+                if (!res.ok) throw new Error('Lookup failed');
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+                const cards = [renderSummary(data)];
+                cards.push(...data.providers.map((provider) => renderCard({ ...provider, title: providersMeta.find(p => p.id === provider.id)?.title })));
+                cards.push(renderMap(data.aggregate));
+                resultsEl.innerHTML = cards.join('');
+                setLoading(false);
+                resultsEl.classList.add('visible');
+            } catch (err) {
+                resultsEl.innerHTML = `<div class="card full-width"><div class="card-title">Lookup error</div><div class="card-value" style="color:#ff6b6b;">${err.message}</div></div>`;
+                setLoading(false);
+                resultsEl.classList.add('visible');
+            }
+        }
+
+        async function bootstrap() {
+            try {
+                const res = await fetch('/api/ip');
+                const data = await res.json();
+                hostInput.value = data.ip || '45.144.54.29';
+                await lookup(hostInput.value);
+            } catch (err) {
+                hostInput.value = '45.144.54.29';
+                await lookup(hostInput.value);
+            }
+        }
+
+        function startCheck() {
+            const host = hostInput.value.trim() || '45.144.54.29';
+            lookup(host);
+        }
+
+        scanBtn.addEventListener('click', startCheck);
+        hostInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                startCheck();
+            }
+        });
+
+        bootstrap();
+    </script>
 </body>
 </html>
