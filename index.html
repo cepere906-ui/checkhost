@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CheckHost Lite</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="page-header">
+    <div class="branding">
+      <span class="logo">CheckHost</span>
+      <span class="tagline">IP and ASN lookup via public APIs</span>
+    </div>
+    <nav class="links">
+      <a href="https://ipapi.co/" target="_blank" rel="noreferrer">ipapi.co</a>
+      <a href="https://ipwho.is/" target="_blank" rel="noreferrer">ipwho.is</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <section class="card">
+      <h1>Query IP, domain or host</h1>
+      <p class="lead">Enter an IP address or hostname to fetch geo/ASN details using free public APIs.</p>
+
+      <form id="lookup-form" class="lookup-form" novalidate>
+        <label class="field">
+          <span>IP address or hostname</span>
+          <div class="input-row">
+            <input id="query" type="text" name="query" placeholder="8.8.8.8 or example.com" autocomplete="off" required />
+            <button type="submit">Lookup</button>
+          </div>
+        </label>
+        <p id="form-help" class="form-help">Press Enter or click Lookup to run a query.</p>
+      </form>
+
+      <div id="status" class="status muted">Ready. Your public IP will load automatically.</div>
+
+      <section id="result" class="result" aria-live="polite"></section>
+    </section>
+
+    <section class="card info">
+      <h2>How it works</h2>
+      <ul>
+        <li>The page is 100% static and runs from GitHub Pages.</li>
+        <li>Requests are sent directly from your browser to <code>ipapi.co</code> (primary) and <code>ipwho.is</code> (fallback).</li>
+        <li>No server-side processing, no tokens stored. API limits of the providers apply.</li>
+      </ul>
+    </section>
+  </main>
+
+  <template id="result-template">
+    <div class="grid">
+      <div><span class="label">IP</span><span class="value" data-field="ip"></span></div>
+      <div><span class="label">Version</span><span class="value" data-field="version"></span></div>
+      <div><span class="label">Hostname</span><span class="value" data-field="hostname"></span></div>
+      <div><span class="label">ISP / Org</span><span class="value" data-field="org"></span></div>
+      <div><span class="label">ASN</span><span class="value" data-field="asn"></span></div>
+      <div><span class="label">Country</span><span class="value" data-field="country"></span></div>
+      <div><span class="label">Region</span><span class="value" data-field="region"></span></div>
+      <div><span class="label">City</span><span class="value" data-field="city"></span></div>
+      <div><span class="label">Timezone</span><span class="value" data-field="timezone"></span></div>
+      <div><span class="label">Latitude</span><span class="value" data-field="latitude"></span></div>
+      <div><span class="label">Longitude</span><span class="value" data-field="longitude"></span></div>
+      <div><span class="label">Coordinates</span><span class="value" data-field="coordinates"></span></div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
