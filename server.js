@@ -1,6 +1,10 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const net = require('net');
+const dns = require('dns').promises;
+
+const REQUEST_TIMEOUT = 5000;
 
 const REQUEST_TIMEOUT = 5000;
 
@@ -190,6 +194,24 @@ async function runLookups(query) {
   };
 }
 
+async function resolveTarget(rawQuery) {
+  const query = (rawQuery || '').trim();
+  if (!query) {
+    return { input: query, target: query };
+  }
+
+  if (net.isIP(query)) {
+    return { input: query, target: query };
+  }
+
+  try {
+    const result = await dns.lookup(query);
+    return { input: query, target: result.address, hostname: query };
+  } catch (error) {
+    return { input: query, error: 'Unable to resolve domain to IP' };
+  }
+}
+
 const server = http.createServer((req, res) => {
   if (req.url === '/api/ip') {
     const ip = getIp(req);
@@ -200,12 +222,21 @@ const server = http.createServer((req, res) => {
 
   if (req.url.startsWith('/api/lookup')) {
     const { searchParams } = new URL(req.url, 'http://localhost');
-    const query = searchParams.get('target') || getIp(req);
+    const rawQuery = searchParams.get('target') || getIp(req);
 
-    runLookups(query)
-      .then((payload) => {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(payload));
+    resolveTarget(rawQuery)
+      .then((resolved) => {
+        if (resolved.error || !resolved.target) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: resolved.error || 'Lookup failed', query: rawQuery }));
+          return;
+        }
+
+        return runLookups(resolved.target)
+          .then((payload) => {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ ...payload, input: resolved.input, resolved: resolved.target, hostname: resolved.hostname || '' }));
+          });
       })
       .catch(() => {
         res.writeHead(500, { 'Content-Type': 'application/json' });

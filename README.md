@@ -1,6 +1,6 @@
 # Render-ready IP intelligence playground
 
-Node server that returns the visitor's IP address at `/api/ip` and performs multi-provider lookups at `/api/lookup?target=<host>`. The public UI renders a premium-styled dashboard for querying IPs or domains and surfaces geo/ASN details from several free providers.
+Node server that returns the visitor's IP address at `/api/ip` and performs multi-provider lookups at `/api/lookup?target=<host>`. Domain inputs are resolved to an IP server-side before the geo/ASN calls run. The public UI renders a premium-styled dashboard for querying IPs or domains and surfaces geo/ASN details from several free providers.
 
 ## Run locally
 ```bash

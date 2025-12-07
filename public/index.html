@@ -336,6 +336,22 @@
         const resultsEl = document.getElementById('results');
         const wrapper = document.getElementById('search-wrapper');
 
+        function renderSummary(meta) {
+            const input = meta.input || meta.query || '—';
+            const resolved = meta.resolved || input;
+            const hostname = meta.hostname || '—';
+            return `
+                <div class="card full-width">
+                    <div class="card-title">Query summary</div>
+                    <div class="card-value">
+                        <span class="card-label">Input:</span> ${input}<br>
+                        <span class="card-label">Resolved IP:</span> ${resolved}<br>
+                        <span class="card-label">Hostname:</span> ${hostname}
+                    </div>
+                </div>
+            `;
+        }
+
         function countryWithFlag(country, code) {
             if (!country && !code) return 'Unavailable';
             const flag = code && code.length === 2
@@ -400,7 +416,9 @@
                 const res = await fetch(`/api/lookup?target=${encodeURIComponent(host)}`);
                 if (!res.ok) throw new Error('Lookup failed');
                 const data = await res.json();
-                const cards = data.providers.map((provider) => renderCard({ ...provider, title: providersMeta.find(p => p.id === provider.id)?.title }));
+                if (data.error) throw new Error(data.error);
+                const cards = [renderSummary(data)];
+                cards.push(...data.providers.map((provider) => renderCard({ ...provider, title: providersMeta.find(p => p.id === provider.id)?.title })));
                 cards.push(renderMap(data.aggregate));
                 resultsEl.innerHTML = cards.join('');
                 setLoading(false);
