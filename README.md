@@ -1,26 +1,18 @@
-# CheckHost static lookup
+# Render-ready IP echo service
 
-A static IP/ASN lookup page that calls public APIs directly from the browser. Designed to deploy on GitHub Pages via Actions with no servers required.
+Simple Node server that returns the visitor's IP address at `/api/ip` and serves a minimal HTML page that calls it. Designed for Render's free tier (512 MB RAM, 0.1 CPU) with no external dependencies.
 
-## Features
-- Client-side lookup of IP address, hostname, and ASN data via `ipapi.co` with `ipwho.is` as fallback.
-- Auto-detects the visitor's public IP on load.
-- Responsive, single-page UI built with HTML/CSS/JS only.
-- Ready-to-ship GitHub Actions workflow for GitHub Pages.
-
-## Running locally
-Open `index.html` in your browser or serve the repo with any static file server, e.g.:
-
+## Run locally
 ```bash
-python -m http.server 8000
+node server.js
 ```
+Visit http://localhost:3000 to see your detected IP.
 
-## Deployment
-GitHub Actions workflow `.github/workflows/deploy.yml` builds and publishes the static site to GitHub Pages.
+## Deploy to Render
+1. Create a new **Web Service** from this repo.
+2. Environment: `Node` (>=18).
+3. Build command: _leave empty_ (none needed).
+4. Start command: `node server.js`.
+5. After deploy, open the service URL and the page will show the inbound IP.
 
-Steps:
-1. Enable Pages in the repository settings with the "GitHub Actions" source.
-2. Push changes to the `main` branch.
-3. Actions will build and deploy automatically to the Pages environment.
-
-To use a custom domain (e.g., `check.hiend.shop`), add a `CNAME` file at the repo root with the domain and set the same domain in the Pages settings.
+The IP is determined server-side using standard proxy headers (`cf-connecting-ip`, `x-real-ip`, `x-forwarded-for`) or the socket address. No API keys or extra setup required.

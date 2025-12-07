@@ -1,0 +1,13 @@
+{
+  "name": "checkhost-ip-service",
+  "version": "1.0.0",
+  "description": "Minimal IP echo service for Render (Node http).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
